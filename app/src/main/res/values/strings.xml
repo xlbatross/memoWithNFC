@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">projectTest2</string>
+    <string name="inputcontent">메모 내용 입력</string>
+    <string name="KoreanOK">확인</string>
+    <string name="KoreanCancel">취소</string>
+    <string name="Title">너의 할일은</string>
+</resources>

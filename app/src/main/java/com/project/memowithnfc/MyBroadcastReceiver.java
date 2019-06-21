@@ -55,7 +55,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         // Build Notification with Notification Manager
         notificationmanager.notify(0, builder.build());*/
     }
-
+    /*
     private void original(Context context, Intent intent) {
 
     int memo_id = intent.getIntExtra("memo_id", 0);
@@ -93,5 +93,5 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         notificationmanager.notify(0,builder.build());
 
 
-    }
+    }*/
 }

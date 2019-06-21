@@ -44,6 +44,7 @@ public class MemoWriteActivity extends AppCompatActivity {
     private TextView category_select;
     private TextView date;
     private TextView time;
+    private Calendar cal = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class MemoWriteActivity extends AppCompatActivity {
 
     public void init_toolbar() {
         // 툴바 생성 및 설정
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar_memo) ;
+        Toolbar tb = findViewById(R.id.toolbar_memo) ;
         setSupportActionBar(tb);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false); //기본 타이틀을 생략
@@ -88,7 +89,7 @@ public class MemoWriteActivity extends AppCompatActivity {
                 return true;
             }
             case R.id.memo_add: {
-                ToggleButton alarm = (ToggleButton) findViewById(R.id.alarm_setting);
+                ToggleButton alarm = findViewById(R.id.alarm_setting);
 
                 if(alarm.isChecked())
                     memo.setAlarmSetting(111);
@@ -135,8 +136,6 @@ public class MemoWriteActivity extends AppCompatActivity {
     // 메모를 처음 등록할떄 알고리즘
     //
     private void initAlarmManager(){
-        int i = 2; // cal 값을로 세팅
-
         // 메모 전체화면 열어주기 뷰홀더를 이용하여 메모 아이디를 넘기고 있음
         // 메모 아이디만 넘겨주면 전체화면을 열수 있다.
         // 메모 아이디를 리시버에 넘겨준다.
@@ -156,8 +155,7 @@ public class MemoWriteActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MyBroadcastReceiver.class);//  인텐트가 어디로 갈지 적어줘야 한다.
 
-        // intent.putExtra("object",memo); //메모 객체를 넘기기 위한 인텐트
-
+        // 인텐트로 전달할 값
         intent.putExtra("memo_id", memo.getId());
         intent.putExtra("category_name", memo.getCategory_name());
         intent.putExtra("content", memo.getContent());
@@ -167,9 +165,7 @@ public class MemoWriteActivity extends AppCompatActivity {
 
         // set alarm manager
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);// get alarm service
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (i * 1000), m_pendingIntent); // set alarm
-        Toast.makeText(this, "Alarm set in " + i + " seconds",Toast.LENGTH_SHORT).show(); // debug code
-
+        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), m_pendingIntent); // set alarm
     }
 
     ////////////////////////////////////////////// hasukjun
@@ -222,9 +218,12 @@ public class MemoWriteActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH, monthOfYear);
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 String monthofyears = (monthOfYear + 1 >= 10 ? String.valueOf(monthOfYear + 1) : "0" + String.valueOf(monthOfYear + 1));
                 String dayofmonths = (dayOfMonth >= 10 ? String.valueOf(dayOfMonth) : "0" + String.valueOf(dayOfMonth));
-                date.setText(String.valueOf(year) + "-" + monthofyears + "-" + dayofmonths);
+                date.setText(year + "-" + monthofyears + "-" + dayofmonths);
                 date.setTextColor(Color.BLACK);
                 memo.setDate(date.getText().toString());
             }
@@ -239,8 +238,11 @@ public class MemoWriteActivity extends AppCompatActivity {
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                String hourofdays = (hourOfDay >= 10 ? String.valueOf(hourOfDay) : "0" + String.valueOf(hourOfDay));
-                String minutes = (minute >= 10 ? String.valueOf(minute) : "0" + String.valueOf(minute));
+                cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                cal.set(Calendar.MINUTE, minute);
+                cal.set(Calendar.SECOND, 0);
+                String hourofdays = (hourOfDay >= 10 ? String.valueOf(hourOfDay) : "0" + hourOfDay);
+                String minutes = (minute >= 10 ? String.valueOf(minute) : "0" + minute);
                 time.setText(hourofdays + ":" + minutes);
                 time.setTextColor(Color.BLACK);
                 memo.setTime(time.getText().toString());
@@ -252,7 +254,7 @@ public class MemoWriteActivity extends AppCompatActivity {
     }
 
     public void init_content() {
-        EditText content = (EditText) findViewById(R.id.content_text);
+        EditText content = findViewById(R.id.content_text);
 
         content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -271,7 +273,7 @@ public class MemoWriteActivity extends AppCompatActivity {
             }
         });
 
-        ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.memo_write_container);
+        ConstraintLayout cl = findViewById(R.id.memo_write_container);
         InputMethodManager controlManager = (InputMethodManager) getSystemService(Service.INPUT_METHOD_SERVICE);
         SoftKeyboard softKeyboard = new SoftKeyboard(cl, controlManager);
         softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {

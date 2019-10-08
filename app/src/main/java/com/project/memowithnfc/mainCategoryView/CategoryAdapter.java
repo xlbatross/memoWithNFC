@@ -95,12 +95,34 @@ public class CategoryAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHold
             CategoryItem cgi = (CategoryItem) visibleItems.get(position);
             categoryViewHolder.category.setText(cgi.category.getName());
 
-            categoryViewHolder.category.setOnClickListener(new View.OnClickListener() {
+            categoryViewHolder.cView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    categoryViewHolder.fold.toggle();
+                }
+            });
+
+            categoryViewHolder.fold.setTag(holder);
+            categoryViewHolder.fold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    int holderPosition = ((CategoryViewHolder)buttonView.getTag()).getAdapterPosition();
+                    if(isChecked) {
+                        expandMemoItems(holderPosition);
+                    }
+                    else {
+                        collapseMemoItems(holderPosition);
+                    }
+                }
+            });
+
+            categoryViewHolder.cView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
                     Intent intent = new Intent(context, CategoryMemoActivity.class);
                     intent.putExtra("category_id", cgi.category.getId());
                     context.startActivity(intent);
+                    return false;
                 }
             });
 
@@ -115,20 +137,6 @@ public class CategoryAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHold
                         Intent intent = new Intent(context, NfcCheckActivity.class);
                         intent.putExtra("category_id", cgi.category.getId());
                         context.startActivity(intent);
-                    }
-                }
-            });
-
-            categoryViewHolder.fold.setTag(holder);
-            categoryViewHolder.fold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    int holderPosition = ((CategoryViewHolder)buttonView.getTag()).getAdapterPosition();
-                    if(isChecked) {
-                        expandMemoItems(holderPosition);
-                    }
-                    else {
-                        collapseMemoItems(holderPosition);
                     }
                 }
             });

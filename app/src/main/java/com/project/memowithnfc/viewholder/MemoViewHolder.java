@@ -28,12 +28,22 @@ public class MemoViewHolder extends RecyclerView.ViewHolder {
         this.category = (TextView) view.findViewById(R.id.Memo_category);
         this.mid = (TextView) view.findViewById(R.id.Memo_id);
 
-        this.mView.setOnClickListener(new View.OnClickListener() {
+        /*this.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(view.getContext(), WholeMemoActivity.class);
                 intent.putExtra("memo_id", Integer.valueOf(mid.getText().toString()));
                 view.getContext().startActivity(intent);
+            }
+        });*/
+
+        this.mView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(view.getContext(), WholeMemoActivity.class);
+                intent.putExtra("memo_id", Integer.valueOf(mid.getText().toString()));
+                view.getContext().startActivity(intent);
+                return false;
             }
         });
     }

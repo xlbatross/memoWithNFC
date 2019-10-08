@@ -67,7 +67,7 @@ public class NfcCheckActivity extends AppCompatActivity {
             NdefMessage ndefMessage = new NdefMessage
                     (new NdefRecord[]{
                             createMimeRecord("text/plain", String.valueOf(category.getId()).getBytes())
-                            , NdefRecord.createApplicationRecord("com.example.projecttest2")
+                            , NdefRecord.createApplicationRecord("com.project.memowithnfc")
                     });
 
             writeTag(tag, ndefMessage);

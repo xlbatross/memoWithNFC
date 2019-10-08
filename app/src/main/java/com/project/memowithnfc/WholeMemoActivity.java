@@ -33,6 +33,8 @@ import com.project.memowithnfc.db.DBHelper;
 import com.project.memowithnfc.vo.Category;
 import com.project.memowithnfc.vo.Memo;
 
+import java.util.Calendar;
+
 public class WholeMemoActivity extends AppCompatActivity {
 
     private int memo_id;
@@ -225,7 +227,8 @@ public class WholeMemoActivity extends AppCompatActivity {
             }
         };
 
-        DatePickerDialog dialog = new DatePickerDialog(this, listener, 2013, 9, 22);
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog dialog = new DatePickerDialog(this, listener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         dialog.show();
     }
 
@@ -244,7 +247,8 @@ public class WholeMemoActivity extends AppCompatActivity {
             }
         };
 
-        TimePickerDialog dialog = new TimePickerDialog(this, listener, 12, 0, true);
+        Calendar calendar = Calendar.getInstance();
+        TimePickerDialog dialog = new TimePickerDialog(this, listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
         dialog.show();
     }
 

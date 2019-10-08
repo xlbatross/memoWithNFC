@@ -22,9 +22,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="#000000"
+            android:textStyle="bold"
             android:text="@string/Title"
-            android:fontFamily="sans-serif"
-            android:textSize="20sp" />
+            android:fontFamily="@font/bmjua"
+            android:textSize="25sp" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView

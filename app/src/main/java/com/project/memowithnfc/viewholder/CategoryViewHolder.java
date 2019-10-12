@@ -9,15 +9,13 @@ import com.project.memowithnfc.R;
 
 public class CategoryViewHolder extends RecyclerView.ViewHolder {
     public View cView;
-    public TextView category;
-    public ToggleButton nfc;
+    public TextView category_name;
     public ToggleButton fold;
 
     public CategoryViewHolder(View view) {
         super(view);
         this.cView = view;
-        this.category = (TextView) view.findViewById(R.id.category_name);
-        this.nfc = (ToggleButton) view.findViewById(R.id.nfc);
+        this.category_name = (TextView) view.findViewById(R.id.category_name);
         this.fold = (ToggleButton) view.findViewById(R.id.fold);
     }
 }

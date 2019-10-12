@@ -1,6 +1,7 @@
 package com.project.memowithnfc;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.project.memowithnfc.mainCategoryView.CategoryAdapter;
+import com.project.memowithnfc.mainCategoryView.MainAdapter;
 import com.project.memowithnfc.mainCategoryView.DividerItemDecoration;
 import com.project.memowithnfc.db.DBHelper;
 import com.project.memowithnfc.vo.Category;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DBHelper db;
     private RecyclerView cRecyclerView;
-    private CategoryAdapter cAdapter;
+    private MainAdapter cAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         create_data();
         init_toolbar();
         init_category();
-        init_add();
+        init_menu();
     }
 
     public void create_data() {
@@ -48,15 +49,15 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Category> cLIst = db.getAllCategories();
 
-        Memo memo = new Memo("2019-05-11", "11:00", "너나 그리고 우리의 할일은? 공부하는 것인가? 그래야 하는 것인가?이", 111, cLIst.get(0).getId());
-        Memo memo2 = new Memo("2019-05-12", "13:00", "우리의 할일은?이", 111, cLIst.get(0).getId());
-        Memo memo3 = new Memo("2019-05-12", "14:00", "쌈이 밥사기이", 111, cLIst.get(0).getId());
-        Memo memo4 = new Memo("2019-05-14", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
-        Memo memo5 = new Memo("2019-05-15", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
-        Memo memo6 = new Memo("2019-05-16", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
-        Memo memo7 = new Memo("2019-05-17", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
-        Memo memo8 = new Memo("2019-05-18", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
-        Memo memo9 = new Memo("2019-05-19", "14:00", "일단 테스트이", 111, cLIst.get(2).getId());
+        Memo memo = new Memo("2019-10-10", "14:45", "너나 그리고 우리의 할일은? 공부하는 것인가? 그래야 하는 것인가?이", 111, cLIst.get(0).getId());
+        Memo memo2 = new Memo("2019-10-12", "13:00", "우리의 할일은?이", 111, cLIst.get(0).getId());
+        Memo memo3 = new Memo("2019-10-12", "14:00", "쌈이 밥사기이", 111, cLIst.get(0).getId());
+        Memo memo4 = new Memo("2019-10-14", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
+        Memo memo5 = new Memo("2019-10-15", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
+        Memo memo6 = new Memo("2019-10-16", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
+        Memo memo7 = new Memo("2019-10-17", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
+        Memo memo8 = new Memo("2019-10-18", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
+        Memo memo9 = new Memo("2019-10-19", "14:00", "일단 테스트이", 111, cLIst.get(2).getId());
         db.insertMemo(memo);
         db.insertMemo(memo2);
         db.insertMemo(memo3);
@@ -104,14 +105,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void init_category() {
         cRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_category);
-        cAdapter = new CategoryAdapter(this, db);
+        cAdapter = new MainAdapter(this, db);
         cRecyclerView.setAdapter(cAdapter);
         cRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         cRecyclerView.addItemDecoration(new DividerItemDecoration(this));
     }
 
-    public void init_add() {
-        Button add_memo = (Button) findViewById(R.id.add_memo);
+    public void init_menu() {
+        Button add_memo = (Button) findViewById(R.id.add_memo_main);
         add_memo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +120,27 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);//액티비티 띄우기
             }
         });
+
+        Button regist_nfc = (Button) findViewById(R.id.regist_nfc_main);
+        regist_nfc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CategorySelectActivity.class);
+                startActivityForResult(intent,1);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                Category result = (Category) data.getSerializableExtra("result");
+                Intent intent = new Intent(getApplicationContext(), NfcCheckActivity.class);
+                intent.putExtra("category_id", result.getId());
+                startActivity(intent);//액티비티 띄우기
+            }
+        }
     }
 
     @Override
@@ -129,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        cAdapter = new CategoryAdapter(this, db);
+        cAdapter = new MainAdapter(this, db);
         cRecyclerView.setAdapter(cAdapter);
     }
 

@@ -176,14 +176,14 @@ public class WholeMemoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(WholeMemoActivity.this, CategorySelectActivity.class);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent,3);
             }
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 1) {
+        if(requestCode == 3) {
             if(resultCode == RESULT_OK) {
                 Category result = (Category) data.getSerializableExtra("result");
                 category_select.setText(result.getName());

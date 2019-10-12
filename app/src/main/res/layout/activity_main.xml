@@ -34,33 +34,33 @@
         android:layout_height="0dp"
         android:overScrollMode="never"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
-        app:layout_constraintBottom_toTopOf="@+id/menu_container"/>
+        app:layout_constraintBottom_toTopOf="@+id/menu_container_main"/>
 
     <android.support.constraint.ConstraintLayout
-        android:id = "@+id/menu_container"
+        android:id = "@+id/menu_container_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view_category"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
-            android:id="@+id/regist_nfc"
+            android:id="@+id/regist_nfc_main"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="nfc 등록"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/add_memo"/>
+            app:layout_constraintEnd_toStartOf="@id/add_memo_main"/>
 
         <Button
-            android:id="@+id/add_memo"
+            android:id="@+id/add_memo_main"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="메모 추가"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/regist_nfc"
+            app:layout_constraintStart_toEndOf="@id/regist_nfc_main"
             app:layout_constraintEnd_toEndOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 

@@ -13,12 +13,12 @@ import com.project.memowithnfc.vo.Category;
 
 import java.util.ArrayList;
 
-public class CategoryListAdapter extends  RecyclerView.Adapter<CategoryListAdapter.CategoryListViewHolder>{
+public class CategorySelectAdapter extends  RecyclerView.Adapter<CategorySelectAdapter.CategoryListViewHolder>{
     private Context context;
     private ArrayList<Category> mList;
     private int mSelectedItem = -1;
 
-    public CategoryListAdapter(Context context, ArrayList<Category> mList) {
+    public CategorySelectAdapter(Context context, ArrayList<Category> mList) {
         this.context = context;
         this.mList = mList;
     }

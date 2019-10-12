@@ -39,7 +39,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // category Table - column names
     private static final String KEY_CATEGORY_NAME = "name";
-    private static final String KEY_NFC = "nfc";
 
     // Table Create Statements
     // memo table create statement
@@ -51,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     + KEY_CONTENT + " TEXT NOT NULL,"
                     + KEY_ALARMSETTING + " INTEGER NOT NULL,"
                     + KEY_CATEGORY_ID + " INTEGER NOT NULL,"
-                    + "UNIQUE(" + KEY_DATE + "," + KEY_TIME + "),"
+                    + "UNIQUE(" + KEY_DATE + "," + KEY_TIME + "," + KEY_CONTENT + "),"
                     + "CONSTRAINT category_id_fk FOREIGN KEY (" + KEY_CATEGORY_ID + ") "
                     + "REFERENCES " + TABLE_CATEGORY + "(" + KEY_ID + ") ON DELETE CASCADE"
                     + ")";
@@ -60,8 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_CATEGORY =
             "CREATE TABLE " + TABLE_CATEGORY + "("
                     + KEY_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    + KEY_CATEGORY_NAME + " TEXT NOT NULL UNIQUE, "
-                    + KEY_NFC + " TEXT NOT NULL " + ")";
+                    + KEY_CATEGORY_NAME + " TEXT NOT NULL UNIQUE " + ")";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -112,7 +110,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_CATEGORY_NAME, category.getName());
-        values.put(KEY_NFC, category.getNfc());
 
         // insert row
         long category_id = db.insert(TABLE_CATEGORY, null, values);
@@ -140,7 +137,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         ct.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         ct.setName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
-        ct.setNfc(c.getString(c.getColumnIndex(KEY_NFC)));
 
         return ct;
     }
@@ -164,29 +160,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         ct.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         ct.setName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
-        ct.setNfc(c.getString(c.getColumnIndex(KEY_NFC)));
-
-        return ct;
-    }
-
-    public Category getCategoryByNFC(String nfc) {
-        String selectQuery = "SELECT  * FROM " + TABLE_CATEGORY
-                + " WHERE " + KEY_NFC + " LIKE '" + nfc + "'" ;
-
-        Log.e(LOG, selectQuery);
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(selectQuery, null);
-
-        Category ct = new Category();
-
-        if (c != null) {
-            c.moveToFirst();
-
-            ct.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-            ct.setName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
-            ct.setNfc(c.getString(c.getColumnIndex(KEY_NFC)));
-        }
 
         return ct;
     }
@@ -210,7 +183,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 ct.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 ct.setName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
-                ct.setNfc(c.getString(c.getColumnIndex(KEY_NFC)));
 
                 // adding to memo list
                 categories.add(ct);
@@ -228,7 +200,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_CATEGORY_NAME, category.getName());
-        values.put(KEY_NFC, category.getNfc());
 
         // updating row
         return db.update(TABLE_CATEGORY, values, KEY_ID + " = ?",
@@ -348,7 +319,6 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<Memo> memos = new ArrayList<Memo>();
 
         //SELECT * FROM memo mm, category ct WHERE ct.id = category_id AND mm.category_id = ct.id;
-
         String selectQuery = "SELECT  mm.*, ct." + KEY_CATEGORY_NAME + " FROM " + TABLE_MEMO + " mm, " + TABLE_CATEGORY + " ct "
                 + "WHERE ct." + KEY_ID + " = " + category_id
                 + " AND mm." + KEY_CATEGORY_ID + " = " + "ct." + KEY_ID ;
@@ -377,6 +347,89 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return memos;
     }
+
+    /*
+     * getting next memos under single category
+     * */
+    public ArrayList<Memo> getNextMemosByCategory(int category_id) {
+        ArrayList<Memo> memos = new ArrayList<Memo>();
+
+        //SELECT * FROM memo mm, category ct WHERE ct.id = category_id AND mm.category_id = ct.id;
+        String selectQuery = "SELECT  mm.*, ct." + KEY_CATEGORY_NAME + " FROM " + TABLE_MEMO + " mm, " + TABLE_CATEGORY + " ct "
+                + "WHERE ct." + KEY_ID + " = " + category_id
+                + " AND mm." + KEY_CATEGORY_ID + " = " + "ct." + KEY_ID
+                + " AND CAST(strftime('%s', " + KEY_DATE + ") AS integer )"
+                + " + (60 * 60 * CAST(strftime('%H', " + KEY_TIME +") AS integer))"
+                + " + (60 * CAST(strftime('%M', " + KEY_TIME +") AS INTEGER))"
+                + " + 60 >= CAST(strftime('%s', 'now', 'localtime') AS integer) "
+                + "order by " + KEY_DATE + " asc, " + KEY_TIME +" asc";
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Memo mm = new Memo();
+                mm.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                mm.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                mm.setTime(c.getString(c.getColumnIndex(KEY_TIME)));
+                mm.setContent(c.getString(c.getColumnIndex(KEY_CONTENT)));
+                mm.setAlarmSetting(c.getInt(c.getColumnIndex(KEY_ALARMSETTING)));
+                mm.setCategory_id(c.getInt(c.getColumnIndex(KEY_CATEGORY_ID)));
+                mm.setCategory_name(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
+
+                // adding to memo list
+                memos.add(mm);
+            } while (c.moveToNext());
+        }
+
+        return memos;
+    }
+
+    /*
+     * getting previous memos under single category
+     * */
+    public ArrayList<Memo> getPreviousMemosByCategory(int category_id) {
+        ArrayList<Memo> memos = new ArrayList<Memo>();
+
+        //SELECT * FROM memo mm, category ct WHERE ct.id = category_id AND mm.category_id = ct.id;
+        String selectQuery = "SELECT  mm.*, ct." + KEY_CATEGORY_NAME + " FROM " + TABLE_MEMO + " mm, " + TABLE_CATEGORY + " ct "
+                + "WHERE ct." + KEY_ID + " = " + category_id
+                + " AND mm." + KEY_CATEGORY_ID + " = " + "ct." + KEY_ID
+                + " AND CAST(strftime('%s', " + KEY_DATE + ") AS integer )"
+                + " + (60 * 60 * CAST(strftime('%H', " + KEY_TIME +") AS integer))"
+                + " + (60 * CAST(strftime('%M', " + KEY_TIME +") AS INTEGER))"
+                + " + 60 < CAST(strftime('%s', 'now', 'localtime') AS integer) "
+                + "order by " + KEY_DATE + " desc, " + KEY_TIME +" desc";
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Memo mm = new Memo();
+                mm.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                mm.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+                mm.setTime(c.getString(c.getColumnIndex(KEY_TIME)));
+                mm.setContent(c.getString(c.getColumnIndex(KEY_CONTENT)));
+                mm.setAlarmSetting(c.getInt(c.getColumnIndex(KEY_ALARMSETTING)));
+                mm.setCategory_id(c.getInt(c.getColumnIndex(KEY_CATEGORY_ID)));
+                mm.setCategory_name(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
+
+                // adding to memo list
+                memos.add(mm);
+            } while (c.moveToNext());
+        }
+
+        return memos;
+    }
+
 
     /*
      * getting all memos under single content

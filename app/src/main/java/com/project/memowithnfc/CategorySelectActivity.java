@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.project.memowithnfc.categoryselectListView.CategoryListAdapter;
+import com.project.memowithnfc.categoryselectListView.CategorySelectAdapter;
 import com.project.memowithnfc.db.DBHelper;
 import com.project.memowithnfc.vo.Category;
 
@@ -25,7 +25,7 @@ public class CategorySelectActivity extends AppCompatActivity {
 
     private DBHelper db;
     private ArrayList<Category> mList;
-    private CategoryListAdapter cAdapter;
+    private CategorySelectAdapter cAdapter;
     private Category _new;
 
     @Override
@@ -53,7 +53,7 @@ public class CategorySelectActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(sLinearLayoutManager);
 
         // RecyclerView를 위해 CustomAdapter를 사용합니다.
-        cAdapter = new CategoryListAdapter(this, mList);
+        cAdapter = new CategorySelectAdapter(this, mList);
         mRecyclerView.setAdapter(cAdapter);
     }
 

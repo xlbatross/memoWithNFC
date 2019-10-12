@@ -25,7 +25,8 @@ public class CategoryMemoActivity extends AppCompatActivity {
 
     private int category_id;
     private DBHelper db;
-    private RecyclerView recyclerView;
+    private RecyclerView nRecyclerView;
+    private RecyclerView pRecyclerView;
     private TextView title;
 
     @Override
@@ -47,9 +48,13 @@ public class CategoryMemoActivity extends AppCompatActivity {
     }
 
     public void init_recyclerview() {
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_category_memo);
-        recyclerView.setAdapter(new CategoryMemoAdapter(this, db.getAllMemosByCategory(category_id)));
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        nRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_next_memo);
+        nRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getNextMemosByCategory(category_id)));
+        nRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        pRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_previous_memo);
+        pRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getPreviousMemosByCategory(category_id)));
+        pRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void init_toolbar() {
@@ -192,7 +197,8 @@ public class CategoryMemoActivity extends AppCompatActivity {
             processIntent(getIntent());
             title.setText(db.getCategory(category_id).getName());
         }
-        recyclerView.setAdapter(new CategoryMemoAdapter(this, db.getAllMemosByCategory(category_id)));
+        nRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getNextMemosByCategory(category_id)));
+        pRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getPreviousMemosByCategory(category_id)));
     }
 
     public void processIntent(Intent intent){

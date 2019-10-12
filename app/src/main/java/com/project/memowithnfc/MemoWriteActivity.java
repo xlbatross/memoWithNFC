@@ -177,14 +177,14 @@ public class MemoWriteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MemoWriteActivity.this, CategorySelectActivity.class);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent,2);
             }
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 1) {
+        if(requestCode == 2) {
             if(resultCode == RESULT_OK) {
                 Category result = (Category) data.getSerializableExtra("result");
                 category_select.setText(result.getName());

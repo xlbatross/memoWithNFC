@@ -25,7 +25,7 @@ import com.project.memowithnfc.vo.Memo;
 
 import java.util.ArrayList;
 
-public class CategoryAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class MainAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private Context context;
     private DBHelper db;
 
@@ -34,7 +34,7 @@ public class CategoryAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHold
     private final int MEMO_VIEW_COUNT = 2;
     private ArrayList<Item> visibleItems = new ArrayList<>();
 
-    public CategoryAdapter(Context context, DBHelper db) {
+    public MainAdapter(Context context, DBHelper db) {
         this.context = context;
         this.db = db;
 
@@ -42,7 +42,7 @@ public class CategoryAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHold
         for(Category cg : cList) {
             visibleItems.add(new CategoryItem(cg));
             CategoryItem cgi = (CategoryItem) visibleItems.get(visibleItems.size() - 1);
-            ArrayList<Memo> mms = new ArrayList<>(this.db.getAllMemosByCategory(cg.getId()));
+            ArrayList<Memo> mms = new ArrayList<>(this.db.getNextMemosByCategory(cg.getId()));
             if(mms.size() != 0) {
                 int i = visibleItems.size();
                 for(Memo mm : mms) {
@@ -93,7 +93,7 @@ public class CategoryAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHold
         if(holder instanceof CategoryViewHolder) {
             final CategoryViewHolder categoryViewHolder = (CategoryViewHolder) holder;
             CategoryItem cgi = (CategoryItem) visibleItems.get(position);
-            categoryViewHolder.category.setText(cgi.category.getName());
+            categoryViewHolder.category_name.setText(cgi.category.getName());
 
             categoryViewHolder.cView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -125,21 +125,6 @@ public class CategoryAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHold
                     return false;
                 }
             });
-
-            categoryViewHolder.nfc.setChecked(!cgi.category.getNfc().equals("0"));
-            categoryViewHolder.nfc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(!isChecked) {
-                        deleteNfc(context, cgi.category);
-                    }
-                    else {
-                        Intent intent = new Intent(context, NfcCheckActivity.class);
-                        intent.putExtra("category_id", cgi.category.getId());
-                        context.startActivity(intent);
-                    }
-                }
-            });
         }
         else if(holder instanceof MemoViewHolder) {
             final MemoViewHolder memoViewHolder = (MemoViewHolder) holder;
@@ -150,39 +135,6 @@ public class CategoryAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHold
             //memoViewHolder.category.setText("[" + mmi.memo.getCategory_name());
             memoViewHolder.mid.setText(String.valueOf(mmi.memo.getId()));
         }
-    }
-
-    private void deleteNfc(Context context, Category ct) {
-        boolean checked = true;
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-
-        alertDialogBuilder.setTitle("NFC 태그 삭제"); // 제목 셋팅
-
-        alertDialogBuilder // AlertDialog 셋팅
-                .setMessage("NFC 태그를 삭제하시겠습니까?")
-                .setCancelable(false)
-                .setPositiveButton("삭제",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // nfc를 0으로 셋팅
-                                ct.setNfc("0");
-                                db.updateCategory(ct);
-                            }
-                        })
-                .setNegativeButton("취소",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // 다이얼로그를 취소한다
-                                dialog.cancel();
-                            }
-                        });
-
-        // 다이얼로그 생성
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // 다이얼로그 보여주기
-        alertDialog.show();
     }
 
     private void expandMemoItems(int position) {

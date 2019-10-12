@@ -71,32 +71,7 @@ public class NfcCheckActivity extends AppCompatActivity {
                     });
 
             writeTag(tag, ndefMessage);
-
-            category.setNfc(toHexString(tag.getId()));
-
-            /*Category ct = db.getCategoryByNFC(category.getNfc());
-            if(!ct.getNfc().equals("0")) {
-                ct.setNfc("0");
-                db.updateCategory(ct);
-            }*/
-
-            if(db.updateCategory(category) > 0) {
-                finish();
-                Toast.makeText(this, category.getNfc(), Toast.LENGTH_LONG).show();
-            }
-
         }
-    }
-
-    public static final String CHARS = "0123456789ABCDEF";
-
-    public static String toHexString(byte[] data) {
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i<data.length; ++i) {
-            sb.append(CHARS.charAt((data[i] >> 4) & 0x0F))
-                    .append(CHARS.charAt(data[i] & 0x0F));
-        }
-        return sb.toString();
     }
 
     public void writeTag(Tag tag, NdefMessage message)  {
@@ -117,9 +92,13 @@ public class NfcCheckActivity extends AppCompatActivity {
                     ndefTag.writeNdefMessage(message);
                     ndefTag.close();
                 }
+                finish();
+                Toast.makeText(this, "NFC 등록 성공!", Toast.LENGTH_LONG).show();
             }
             catch(Exception e) {
                 e.printStackTrace();
+                finish();
+                Toast.makeText(this, "NFC 등록 실패", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -149,3 +128,16 @@ public class NfcCheckActivity extends AppCompatActivity {
         db.closeDB();
     }
 }
+
+// NFC 고유 아이디 추출용 함수. 지금은 사용하지 않음
+    /*
+    public static final String CHARS = "0123456789ABCDEF";
+
+    public static String toHexString(byte[] data) {
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<data.length; ++i) {
+            sb.append(CHARS.charAt((data[i] >> 4) & 0x0F))
+                    .append(CHARS.charAt(data[i] & 0x0F));
+        }
+        return sb.toString();
+    } */

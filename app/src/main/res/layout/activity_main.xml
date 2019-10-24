@@ -7,61 +7,28 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_main"
+    <include
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/gradient"
-        android:theme="?attr/actionBarTheme"
-        app:navigationIcon="@drawable/icons8_search_filled_30"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:text="@string/Title"
-            android:fontFamily="@font/bmjua"
-            android:textSize="25sp" />
-    </android.support.v7.widget.Toolbar>
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recycler_view_in_main"
+        />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_category"
+        android:id="@+id/recycler_view_in_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:overScrollMode="never"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
-        app:layout_constraintBottom_toTopOf="@+id/menu_container_main"/>
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/menu_container"/>
 
-    <android.support.constraint.ConstraintLayout
-        android:id = "@+id/menu_container_main"
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_category"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <Button
-            android:id="@+id/regist_nfc_main"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="nfc 등록"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/add_memo_main"/>
-
-        <Button
-            android:id="@+id/add_memo_main"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="메모 추가"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/regist_nfc_main"
-            app:layout_constraintEnd_toEndOf="parent"/>
-    </android.support.constraint.ConstraintLayout>
+        layout="@layout/menu_container"
+        app:layout_constraintTop_toBottomOf="@id/recycler_view_in_main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </android.support.constraint.ConstraintLayout>

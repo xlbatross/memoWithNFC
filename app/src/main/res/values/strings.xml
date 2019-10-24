@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">memoWithNFC</string>
+    <string name="write_memo">메모 작성</string>
+    <string name="whole_memo">전체 메모</string>
     <string name="inputcontent">메모 내용 입력</string>
     <string name="KoreanOK">확인</string>
     <string name="KoreanCancel">취소</string>

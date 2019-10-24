@@ -10,10 +10,12 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -37,7 +39,7 @@ import com.project.memowithnfc.vo.Memo;
 
 import java.util.Calendar;
 
-public class MemoWriteActivity extends AppCompatActivity {
+public class WriteMemoActivity extends AppCompatActivity {
 
     private DBHelper db;
     private Memo memo;
@@ -49,7 +51,7 @@ public class MemoWriteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_memo_write);
+        setContentView(R.layout.activity_write_memo);
 
         init_data();
         init_toolbar();
@@ -66,10 +68,14 @@ public class MemoWriteActivity extends AppCompatActivity {
 
     public void init_toolbar() {
         // 툴바 생성 및 설정
-        Toolbar tb = findViewById(R.id.toolbar_memo) ;
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar) ;
         setSupportActionBar(tb);
 
+        tb.setNavigationIcon(R.drawable.icons8_left_32);
         getSupportActionBar().setDisplayShowTitleEnabled(false); //기본 타이틀을 생략
+
+        TextView tv = (TextView) findViewById(R.id.toolbar_title);
+        tv.setText(R.string.write_memo);
     }
 
     @Override
@@ -176,7 +182,7 @@ public class MemoWriteActivity extends AppCompatActivity {
         category_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MemoWriteActivity.this, CategorySelectActivity.class);
+                Intent intent = new Intent(WriteMemoActivity.this, CategorySelectActivity.class);
                 startActivityForResult(intent,2);
             }
         });
@@ -254,7 +260,7 @@ public class MemoWriteActivity extends AppCompatActivity {
     }
 
     public void init_content() {
-        EditText content = findViewById(R.id.content_text);
+        EditText content = findViewById(R.id.content_in_write_memo);
 
         content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -273,7 +279,7 @@ public class MemoWriteActivity extends AppCompatActivity {
             }
         });
 
-        ConstraintLayout cl = findViewById(R.id.memo_write_container);
+        ConstraintLayout cl = findViewById(R.id.write_memo_container);
         InputMethodManager controlManager = (InputMethodManager) getSystemService(Service.INPUT_METHOD_SERVICE);
         SoftKeyboard softKeyboard = new SoftKeyboard(cl, controlManager);
         softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
@@ -306,22 +312,3 @@ public class MemoWriteActivity extends AppCompatActivity {
         db.closeDB();
     }
 }
-/*
-        Spinner select_category = (Spinner)findViewById(R.id.category_spinner);
-
-        ArrayList<Category> categoryList = db.getAllCategories();
-        CategorySpinnerAdapter spinnerAdapter = new CategorySpinnerAdapter(this, categoryList);
-        select_category.setAdapter(spinnerAdapter);
-
-        select_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                memo.setCategory_id(Integer.valueOf(select_category.getSelectedItem().toString()));
-                //Toast.makeText(getApplicationContext(), select_category.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/

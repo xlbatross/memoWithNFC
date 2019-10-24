@@ -8,191 +8,228 @@
     android:orientation="vertical"
     tools:context=".WholeMemoActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_whole_memo"
+    <include
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/gradient"
-        android:theme="?attr/actionBarTheme"
-        app:navigationIcon="@drawable/icons8_left_32"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="#000000"
-            android:text="전체 메모"
-            android:fontFamily="sans-serif"
-            android:textSize="20sp" />
-    </android.support.v7.widget.Toolbar>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/category_container"
-        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_whole_memo">
+        layout="@layout/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/memo_attribute"
+        />
 
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.33"/>
-
-        <android.support.constraint.Guideline
-            android:id="@+id/end_guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95"/>
-
-        <TextView
-            android:id="@+id/category_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="카테고리"
-            android:textSize="19sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline"/>
-
-        <TextView
-            android:id="@+id/category_selector_whole_memo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/borderline_black"
-            android:hint="터치하면 카테고리 선택창이 뜹니다"
-            android:padding="5dp"
-            android:textSize="15sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideline"
-            app:layout_constraintEnd_toEndOf="@id/end_guideline"/>
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/setting_container"
-        android:layout_width="0dp"
+    <include
+        layout="@layout/memo_attribute"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/category_container">
-
-        <android.support.constraint.Guideline
-            android:id="@+id/first_guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.33"/>
-
-        <android.support.constraint.Guideline
-            android:id="@+id/second_guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.66"/>
-
-        <android.support.constraint.Guideline
-            android:id="@+id/third_guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.99"/>
-
-        <TextView
-            android:id="@+id/date_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="날짜"
-            android:textSize="19sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/first_guideline" />
-
-        <TextView
-            android:id="@+id/time_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="시간"
-            android:textSize="19sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/first_guideline"
-            app:layout_constraintStart_toEndOf="@id/second_guideline" />
-
-        <TextView
-            android:id="@+id/alarm_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="알람 설정"
-            android:textSize="19sp"
-            app:layout_constraintStart_toEndOf="@id/second_guideline"
-            app:layout_constraintEnd_toEndOf="@id/third_guideline"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/date_selector_whole_memo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/borderline_black"
-            android:hint="20XX-XX-XX"
-            android:padding="5dp"
-            android:textSize="15sp"
-            app:layout_constraintTop_toBottomOf="@id/date_text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/first_guideline" />
-
-        <TextView
-            android:id="@+id/time_selector_whole_memo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/borderline_black"
-            android:hint="XX:XX"
-            android:padding="5dp"
-            android:textSize="15sp"
-            app:layout_constraintTop_toBottomOf="@id/date_text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/first_guideline"
-            app:layout_constraintStart_toEndOf="@id/second_guideline" />
-
-        <ToggleButton
-            android:id="@+id/alarm_setting_whole_memo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/date_text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/second_guideline"
-            app:layout_constraintEnd_toEndOf="@id/third_guideline"/>
-
-    </android.support.constraint.ConstraintLayout>
+        app:layout_constraintBottom_toTopOf="@id/content_in_whole_memo"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:layout_editor_absoluteX="0dp" />
 
     <EditText
-        android:id="@+id/content_text_whole_memo"
-        android:layout_width="0dp"
+        android:id="@+id/content_in_whole_memo"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:gravity="top"
         android:background="@drawable/borderline_black"
+        android:fontFamily="@font/scdream3"
+        android:gravity="top"
         android:hint=" 메모 내용을 입력해주세요"
         android:padding="5dp"
         android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/delete_memo"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/setting_container"
-        app:layout_constraintBottom_toTopOf="@id/whole_memo_delete"/>
+        app:layout_constraintTop_toBottomOf="@id/memo_attribute"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/whole_memo_delete"
+        android:id="@+id/delete_memo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="delete"
-        app:layout_constraintTop_toBottomOf="@id/content_text_whole_memo"
+        app:layout_constraintTop_toBottomOf="@id/content_in_whole_memo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 </android.support.constraint.ConstraintLayout>
+
+<!--
+<android.support.v7.widget.Toolbar
+android:id="@+id/toolbar_whole_memo"
+android:layout_width="match_parent"
+android:layout_height="?attr/actionBarSize"
+android:background="@drawable/gradient"
+android:theme="?attr/actionBarTheme"
+app:navigationIcon="@drawable/icons8_left_32"
+app:layout_constraintTop_toTopOf="parent">
+
+<TextView
+    android:id="@+id/toolbar_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:textColor="#000000"
+    android:text="전체 메모"
+    android:fontFamily="sans-serif"
+    android:textSize="20sp" />
+</android.support.v7.widget.Toolbar>
+
+<android.support.constraint.ConstraintLayout
+android:id="@+id/category_container"
+android:layout_width="0dp"
+android:layout_height="wrap_content"
+android:layout_marginTop="10dp"
+app:layout_constraintEnd_toEndOf="parent"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintTop_toBottomOf="@id/toolbar_whole_memo">
+
+<android.support.constraint.Guideline
+    android:id="@+id/guideline"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.33"/>
+
+<android.support.constraint.Guideline
+    android:id="@+id/end_guideline"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.95"/>
+
+<TextView
+    android:id="@+id/category_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="카테고리"
+    android:textSize="19sp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="@id/guideline"/>
+
+<TextView
+    android:id="@+id/category_selector_whole_memo"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/borderline_black"
+    android:hint="터치하면 카테고리 선택창이 뜹니다"
+    android:padding="5dp"
+    android:textSize="15sp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toEndOf="@id/guideline"
+    app:layout_constraintEnd_toEndOf="@id/end_guideline"/>
+</android.support.constraint.ConstraintLayout>
+
+<android.support.constraint.ConstraintLayout
+android:id="@+id/setting_container"
+android:layout_width="0dp"
+android:layout_height="wrap_content"
+android:layout_marginTop="10dp"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintEnd_toEndOf="parent"
+app:layout_constraintTop_toBottomOf="@id/category_container">
+
+<android.support.constraint.Guideline
+    android:id="@+id/first_guideline"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.33"/>
+
+<android.support.constraint.Guideline
+    android:id="@+id/second_guideline"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.66"/>
+
+<android.support.constraint.Guideline
+    android:id="@+id/third_guideline"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.99"/>
+
+<TextView
+    android:id="@+id/date_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="날짜"
+    android:textSize="19sp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toStartOf="@id/first_guideline" />
+
+<TextView
+    android:id="@+id/time_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="시간"
+    android:textSize="19sp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintEnd_toStartOf="@id/first_guideline"
+    app:layout_constraintStart_toEndOf="@id/second_guideline" />
+
+<TextView
+    android:id="@+id/alarm_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="알람 설정"
+    android:textSize="19sp"
+    app:layout_constraintStart_toEndOf="@id/second_guideline"
+    app:layout_constraintEnd_toEndOf="@id/third_guideline"
+    app:layout_constraintTop_toTopOf="parent" />
+
+<TextView
+    android:id="@+id/date_selector_whole_memo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/borderline_black"
+    android:hint="20XX-XX-XX"
+    android:padding="5dp"
+    android:textSize="15sp"
+    app:layout_constraintTop_toBottomOf="@id/date_text"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toStartOf="@id/first_guideline" />
+
+<TextView
+    android:id="@+id/time_selector_whole_memo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/borderline_black"
+    android:hint="XX:XX"
+    android:padding="5dp"
+    android:textSize="15sp"
+    app:layout_constraintTop_toBottomOf="@id/date_text"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toStartOf="@id/first_guideline"
+    app:layout_constraintStart_toEndOf="@id/second_guideline" />
+
+<ToggleButton
+    android:id="@+id/alarm_setting_whole_memo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@id/date_text"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toEndOf="@id/second_guideline"
+    app:layout_constraintEnd_toEndOf="@id/third_guideline"/>
+
+</android.support.constraint.ConstraintLayout>
+
+<EditText
+android:id="@+id/content_text_whole_memo"
+android:layout_width="0dp"
+android:layout_height="0dp"
+android:gravity="top"
+android:background="@drawable/borderline_black"
+android:hint=" 메모 내용을 입력해주세요"
+android:padding="5dp"
+android:textSize="17sp"
+app:layout_constraintEnd_toEndOf="parent"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintTop_toBottomOf="@id/setting_container"
+app:layout_constraintBottom_toTopOf="@id/whole_memo_delete"/>
+-->
+

@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -70,11 +72,11 @@ public class WholeMemoActivity extends AppCompatActivity {
         new_memo = db.getMemo(memo_id);
         change = false;
 
-        category_select = (TextView) findViewById(R.id.category_selector_whole_memo);
-        date = (TextView) findViewById(R.id.date_selector_whole_memo);
-        time = (TextView) findViewById(R.id.time_selector_whole_memo);
-        alarmSetting = (ToggleButton) findViewById(R.id.alarm_setting_whole_memo);
-        content = (EditText) findViewById(R.id.content_text_whole_memo);
+        category_select = (TextView) findViewById(R.id.category_selector);
+        date = (TextView) findViewById(R.id.date_selector);
+        time = (TextView) findViewById(R.id.time_selector);
+        alarmSetting = (ToggleButton) findViewById(R.id.alarm_setting);
+        content = (EditText) findViewById(R.id.content_in_whole_memo);
 
         category_select.setText(ex_memo.getCategory_name());
         date.setText(ex_memo.getDate());
@@ -111,10 +113,14 @@ public class WholeMemoActivity extends AppCompatActivity {
 
     public void init_toolbar() {
         // 툴바 생성 및 설정
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar_whole_memo) ;
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar) ;
         setSupportActionBar(tb);
 
+        tb.setNavigationIcon(R.drawable.icons8_left_32);
         getSupportActionBar().setDisplayShowTitleEnabled(false); //기본 타이틀을 생략
+
+        TextView tv = (TextView) findViewById(R.id.toolbar_title);
+        tv.setText(R.string.whole_memo);
     }
 
     @Override
@@ -274,7 +280,7 @@ public class WholeMemoActivity extends AppCompatActivity {
     }
 
     public void init_delete() {
-        Button delete = (Button) findViewById(R.id.whole_memo_delete);
+        Button delete = (Button) findViewById(R.id.delete_memo);
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override

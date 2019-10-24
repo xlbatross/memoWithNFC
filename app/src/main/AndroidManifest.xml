@@ -48,7 +48,7 @@
             android:theme="@style/popupTheme" />
 
         <activity
-            android:name="com.project.memowithnfc.MemoWriteActivity"
+            android:name="com.project.memowithnfc.WriteMemoActivity"
             android:windowSoftInputMode="adjustResize" />
 
         <activity android:name="com.project.memowithnfc.MainActivity">

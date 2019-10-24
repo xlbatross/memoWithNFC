@@ -4,35 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/category_memo_container"
     tools:context=".CategoryMemoActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_category_memo"
+    <include
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/gradient"
-        android:theme="?attr/actionBarTheme"
-        app:navigationIcon="@drawable/icons8_left_32"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/toolbar_category_memo_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:textColor="#000000"
-            android:text="카테고리명"
-            android:textStyle="bold"
-            android:fontFamily="@font/scdream5"
-            android:textSize="20sp" />
-    </android.support.v7.widget.Toolbar>
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recycler_view_next_memo"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_next_memo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:overScrollMode="never"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_category_memo"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintBottom_toTopOf="@+id/previous_memo_container"
         tools:layout_editor_absoluteX="0dp" >
     </android.support.v7.widget.RecyclerView>
@@ -43,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         app:layout_constraintTop_toBottomOf="@id/recycler_view_next_memo"
-        app:layout_constraintBottom_toTopOf="@id/menu_container_category">
+        app:layout_constraintBottom_toTopOf="@id/menu_container">
 
         <TextView
             android:id="@+id/previous_memo_button"
@@ -63,32 +51,12 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
-        android:id = "@+id/menu_container_category"
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/previous_memo_container"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <Button
-            android:id="@+id/regist_nfc_category"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="nfc 등록"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/add_memo_category"/>
-
-        <Button
-            android:id="@+id/add_memo_category"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="메모 추가"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/regist_nfc_category"
-            app:layout_constraintEnd_toEndOf="parent"/>
-    </android.support.constraint.ConstraintLayout>
+        layout="@layout/menu_container"
+        app:layout_constraintTop_toBottomOf="@id/previous_memo_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </android.support.constraint.ConstraintLayout>

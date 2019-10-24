@@ -1,7 +1,8 @@
 package com.project.memowithnfc;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Typeface;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.project.memowithnfc.mainCategoryView.MainAdapter;
 import com.project.memowithnfc.mainCategoryView.DividerItemDecoration;
@@ -71,10 +73,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void init_toolbar() {
         // 툴바 생성 및 설정
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar_main) ;
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar) ;
         setSupportActionBar(tb);
 
+        tb.setNavigationIcon(R.drawable.icons8_search_filled_30); // 서치 아이콘으로 네비게이션 아이콘 설정
         getSupportActionBar().setDisplayShowTitleEnabled(false); //기본 타이틀을 생략
+
+        TextView tv = (TextView) findViewById(R.id.toolbar_title);
+        Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.bmjua); // fontFamily 변경
+        tv.setTypeface(face);
+        tv.setTextSize(25); // 단위는 sp
     }
 
     @Override
@@ -104,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void init_category() {
-        cRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_category);
+        cRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_in_main);
         cAdapter = new MainAdapter(this, db);
         cRecyclerView.setAdapter(cAdapter);
         cRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -112,16 +120,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void init_menu() {
-        Button add_memo = (Button) findViewById(R.id.add_memo_main);
+        Button add_memo = (Button) findViewById(R.id.add_memo);
         add_memo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MemoWriteActivity.class);
+                Intent intent = new Intent(getApplicationContext(), WriteMemoActivity.class);
                 startActivity(intent);//액티비티 띄우기
             }
         });
 
-        Button regist_nfc = (Button) findViewById(R.id.regist_nfc_main);
+        Button regist_nfc = (Button) findViewById(R.id.register_nfc);
         regist_nfc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

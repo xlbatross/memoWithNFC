@@ -1,25 +1,38 @@
 package com.project.memowithnfc;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.os.Parcelable;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.memowithnfc.categorymemoView.CategoryMemoAdapter;
 import com.project.memowithnfc.db.DBHelper;
 import com.project.memowithnfc.vo.Category;
+
+import org.w3c.dom.Text;
 
 public class CategoryMemoActivity extends AppCompatActivity {
 
@@ -37,13 +50,14 @@ public class CategoryMemoActivity extends AppCompatActivity {
         init_data();
         init_toolbar();
         init_recyclerview();
+        init_previous_memo_button();
     }
 
     public void init_data() {
         category_id = getIntent().getIntExtra("category_id", 1);
         db = new DBHelper(this);
 
-        title = (TextView) findViewById(R.id.toolbar_category_memo_title);
+        title = (TextView) findViewById(R.id.toolbar_title);
         title.setText(db.getCategory(category_id).getName());
     }
 
@@ -59,9 +73,10 @@ public class CategoryMemoActivity extends AppCompatActivity {
 
     public void init_toolbar() {
         // 툴바 생성 및 설정
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar_category_memo) ;
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar) ;
         setSupportActionBar(tb);
 
+        tb.setNavigationIcon(R.drawable.icons8_left_32);
         getSupportActionBar().setDisplayShowTitleEnabled(false); //기본 타이틀을 생략
     }
 
@@ -146,7 +161,7 @@ public class CategoryMemoActivity extends AppCompatActivity {
                                 real_Delete_category();
                             }
                         })
-                .setNegativeButton("취소",
+                .setNegativeButton(R.string.KoreanCancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -172,7 +187,7 @@ public class CategoryMemoActivity extends AppCompatActivity {
                                 finish();
                             }
                         })
-                .setNegativeButton("취소",
+                .setNegativeButton(R.string.KoreanCancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -182,6 +197,49 @@ public class CategoryMemoActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
 
         alertDialog.show();
+    }
+
+    public void init_previous_memo_button() {
+        TextView previous_text = (TextView) findViewById(R.id.previous_memo_button);
+        ConstraintLayout category_memo = (ConstraintLayout) findViewById(R.id.category_memo_container);
+        ConstraintLayout previous = (ConstraintLayout) findViewById(R.id.previous_memo_container);
+        ConstraintSet wide = new ConstraintSet();
+        ConstraintSet reset = new ConstraintSet();
+        wide.clone(category_memo);
+        reset.clone(category_memo);
+
+        previous_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float density = v.getContext().getResources().getDisplayMetrics().density;
+                if(previous.getHeight() == Math.ceil(60 * density)) {
+                    wide.constrainHeight(R.id.previous_memo_container, (int)(270 * density));
+                    wide.applyTo(category_memo);
+                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_wide_height);
+                    previous.startAnimation(animation);
+                }
+                else {
+                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_reset_height);
+                    previous.startAnimation(animation);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            reset.applyTo(category_memo);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override

@@ -90,11 +90,12 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /*
-     * count category column
+     * count category exist
      */
-    public int countCategoryColumn() {
+    public int DoseCategoryExist(long category_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String selectQuery = "SELECT count(*) FROM " + TABLE_CATEGORY;
+        String selectQuery = "SELECT count(*) FROM " + TABLE_CATEGORY + " WHERE "
+                + KEY_ID + " = " + category_id;
 
         Cursor c = db.rawQuery(selectQuery, null);
         c.moveToFirst();
@@ -130,13 +131,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if (c != null)
-            c.moveToFirst();
-
         Category ct = new Category();
 
-        ct.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        ct.setName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
+        if (c != null && c.moveToFirst()) {
+            ct.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            ct.setName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
+        }
 
         return ct;
     }
@@ -146,20 +146,19 @@ public class DBHelper extends SQLiteOpenHelper {
      * */
     public Category getCategoryByName(String name) {
         String selectQuery = "SELECT  * FROM " + TABLE_CATEGORY
-                + " WHERE " + KEY_CATEGORY_NAME + " LIKE '" + name + "'" ;
+                + " WHERE " + KEY_CATEGORY_NAME + " = '" + name + "'" ;
 
         Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if (c != null)
-            c.moveToFirst();
-
         Category ct = new Category();
 
-        ct.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        ct.setName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
+        if (c != null && c.moveToFirst()) {
+            ct.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            ct.setName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
+        }
 
         return ct;
     }
@@ -263,17 +262,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if (c != null)
-            c.moveToFirst();
-
         Memo mm = new Memo();
-        mm.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        mm.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
-        mm.setTime(c.getString(c.getColumnIndex(KEY_TIME)));
-        mm.setContent(c.getString(c.getColumnIndex(KEY_CONTENT)));
-        mm.setAlarmSetting(c.getInt(c.getColumnIndex(KEY_ALARMSETTING)));
-        mm.setCategory_id(c.getInt(c.getColumnIndex(KEY_CATEGORY_ID)));
-        mm.setCategory_name(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
+
+        if (c != null && c.moveToFirst()) {
+            mm.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            mm.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+            mm.setTime(c.getString(c.getColumnIndex(KEY_TIME)));
+            mm.setContent(c.getString(c.getColumnIndex(KEY_CONTENT)));
+            mm.setAlarmSetting(c.getInt(c.getColumnIndex(KEY_ALARMSETTING)));
+            mm.setCategory_id(c.getInt(c.getColumnIndex(KEY_CATEGORY_ID)));
+            mm.setCategory_name(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
+        }
 
         return mm;
     }

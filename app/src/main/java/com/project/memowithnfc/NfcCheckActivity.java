@@ -22,9 +22,8 @@ public class NfcCheckActivity extends AppCompatActivity {
 
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
-    private int category_id;
-    private Category category;
-    private DBHelper db;
+
+    private String category_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +34,11 @@ public class NfcCheckActivity extends AppCompatActivity {
     }
 
     public void init_data() {
-        db = new DBHelper(this);
-        category_id = getIntent().getIntExtra("category_id", 0);
-        category = db.getCategory(category_id);
+        category_name = getIntent().getStringExtra("category_name");
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        Intent intent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        pendingIntent = PendingIntent.getActivity(
+                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
     }
 
     @Override
@@ -66,7 +63,7 @@ public class NfcCheckActivity extends AppCompatActivity {
         if(tag != null) {
             NdefMessage ndefMessage = new NdefMessage
                     (new NdefRecord[]{
-                            createMimeRecord("text/plain", String.valueOf(category.getId()).getBytes())
+                            createMimeRecord("text/plain", category_name.getBytes())
                             , NdefRecord.createApplicationRecord("com.project.memowithnfc")
                     });
 
@@ -125,7 +122,6 @@ public class NfcCheckActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        db.closeDB();
     }
 }
 

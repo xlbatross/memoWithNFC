@@ -6,13 +6,13 @@ public class Category implements Serializable {
     private int id;
     private String name;
 
-    public Category() {}
+    public Category() { this.id = 0; }
 
     public Category(String name) {
         this.name = name;
     }
 
-    public Category(int id, String name, String nfc) {
+    public Category(int id, String name) {
         this.id = id;
         this.name = name;
     }

@@ -2,6 +2,9 @@ package com.project.memowithnfc;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.nfc.NdefMessage;
+import android.nfc.NfcAdapter;
+import android.os.Parcelable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.project.memowithnfc.categorymemoView.CategoryMemoAdapter;
 import com.project.memowithnfc.mainCategoryView.MainAdapter;
 import com.project.memowithnfc.mainCategoryView.DividerItemDecoration;
 import com.project.memowithnfc.db.DBHelper;
@@ -114,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
     public void init_category() {
         cRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_in_main);
         cAdapter = new MainAdapter(this, db);
-        cRecyclerView.setAdapter(cAdapter);
         cRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         cRecyclerView.addItemDecoration(new DividerItemDecoration(this));
     }
@@ -145,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 Category result = (Category) data.getSerializableExtra("result");
                 Intent intent = new Intent(getApplicationContext(), NfcCheckActivity.class);
-                intent.putExtra("category_id", result.getId());
+                intent.putExtra("category_name", result.getName());
                 startActivity(intent);//액티비티 띄우기
             }
         }
@@ -159,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+
         cAdapter = new MainAdapter(this, db);
         cRecyclerView.setAdapter(cAdapter);
     }
@@ -169,3 +174,4 @@ public class MainActivity extends AppCompatActivity {
         db.closeDB();
     }
 }
+

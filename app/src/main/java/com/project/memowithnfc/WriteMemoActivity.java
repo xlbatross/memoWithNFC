@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -91,44 +92,10 @@ public class WriteMemoActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home: {
                 finish();
-                //overridePendingTransition(R.anim.anim_slide_in_top, R.anim.anim_silde_out_bottom); // 전환 애니메이션 삭제
                 return true;
             }
             case R.id.memo_add: {
-                ToggleButton alarm = findViewById(R.id.alarm_setting);
-
-                if(alarm.isChecked())
-                    memo.setAlarmSetting(111);
-                else
-                    memo.setAlarmSetting(0);
-
-                Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0,0);
-
-                long k = 0; // 푸시 알람용
-                if(memo.getCategory_id() == 0)
-                    toast.setText("카테고리가 선택되지 않았습니다.");
-                else if(memo.getDate() == null)
-                    toast.setText("날짜가 선택되지 않았습니다.");
-                else if(memo.getTime() == null)
-                    toast.setText("시간이 선택되지 않았습니다.");
-                else if(memo.getContent() == null)
-                    toast.setText("메모가 작성되지 않았습니다.");
-                else if(memo.getContent().indexOf(" ") == 0 || memo.getContent().indexOf("\n") == 0)
-                    toast.setText("공백문자나 개행이 먼저 올 수 없습니다.");
-                else if((k = db.insertMemo(memo)) > 0) {
-                    toast.setText("메모 작성 완료!");
-
-                    //hasukjun
-                    memo.setId((int)k);
-                    if(memo.getAlarmSetting()>0)
-                        initAlarmManager();
-                    ///////////
-                    finish();
-                }
-                else
-                    toast.setText("메모 작성에 실패했습니다. 다시 시도해주세요.");
-                toast.show();
+                check_memo();
                 return true;
             }
             default: {
@@ -136,6 +103,42 @@ public class WriteMemoActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void check_memo() {
+        ToggleButton alarm = findViewById(R.id.alarm_setting);
+
+        if(alarm.isChecked())
+            memo.setAlarmSetting(111);
+        else
+            memo.setAlarmSetting(0);
+
+        Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0,0);
+
+        long k = 0; // 푸시 알람용
+        if(memo.getCategory_id() == 0)
+            toast.setText("카테고리가 선택되지 않았습니다.");
+        else if(memo.getDate() == null)
+            toast.setText("날짜가 선택되지 않았습니다.");
+        else if(memo.getTime() == null)
+            toast.setText("시간이 선택되지 않았습니다.");
+        else if(memo.getContent() == null)
+            toast.setText("메모가 작성되지 않았습니다.");
+        else if(memo.getContent().indexOf(" ") == 0 || memo.getContent().indexOf("\n") == 0)
+            toast.setText("공백문자나 개행이 먼저 올 수 없습니다.");
+        else if((k = db.insertMemo(memo)) > 0) {
+            toast.setText("메모 작성 완료!");
+
+            if(memo.getAlarmSetting()>0)
+                initAlarmManager();
+
+            finish();
+        }
+        else
+            toast.setText("메모 작성에 실패했습니다. 다시 시도해주세요.");
+        toast.show();
+    }
+
 
     ////////////////////////////////////////////// hasukjun
 

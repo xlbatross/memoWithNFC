@@ -21,7 +21,8 @@
             android:theme="@style/popupTheme">
         </activity>
 
-        <activity android:name="com.project.memowithnfc.CategoryMemoActivity">
+        <activity android:name="com.project.memowithnfc.CategoryMemoActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />

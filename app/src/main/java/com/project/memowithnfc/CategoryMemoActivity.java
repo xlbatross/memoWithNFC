@@ -10,6 +10,7 @@ import android.nfc.NfcAdapter;
 import android.os.Parcelable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,27 +49,22 @@ public class CategoryMemoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_memo);
 
-        init_data();
+        init_id();
         init_toolbar();
-        init_recyclerview();
         init_previous_memo_button();
+        init_menu();
     }
 
-    public void init_data() {
-        category_id = getIntent().getIntExtra("category_id", 1);
+    public void init_id() {
+        category_id = getIntent().getIntExtra("category_id", 0);
         db = new DBHelper(this);
 
         title = (TextView) findViewById(R.id.toolbar_title);
-        title.setText(db.getCategory(category_id).getName());
-    }
 
-    public void init_recyclerview() {
         nRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_next_memo);
-        nRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getNextMemosByCategory(category_id)));
         nRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         pRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_previous_memo);
-        pRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getPreviousMemosByCategory(category_id)));
         pRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -242,21 +239,48 @@ public class CategoryMemoActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onNewIntent(Intent intent){
-        // onResume은 이 메서드 이후에 호출되므로 이 인텐트를 얻어 처리한다.
-        setIntent(intent);
+    public void init_menu() {
+        Button add_memo = (Button) findViewById(R.id.add_memo);
+        add_memo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), WriteMemoActivity.class);
+                startActivity(intent);//액티비티 띄우기
+            }
+        });
+
+        Button regist_nfc = (Button) findViewById(R.id.register_nfc);
+        regist_nfc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), NfcCheckActivity.class);
+                intent.putExtra("category_name", title.getText());
+                startActivity(intent);//액티비티 띄우기
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())){
+        if(NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction()))
             processIntent(getIntent());
+
+        if(category_id != 0) {
             title.setText(db.getCategory(category_id).getName());
+            nRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getNextMemosByCategory(category_id)));
+            pRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getPreviousMemosByCategory(category_id)));
         }
-        nRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getNextMemosByCategory(category_id)));
-        pRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getPreviousMemosByCategory(category_id)));
+        else {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent
+                    .setAction(Intent.ACTION_MAIN)
+                    .addCategory(Intent.CATEGORY_LAUNCHER)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+            Toast.makeText(getApplicationContext(), "NFC에 저장된 카테고리는 존재하지 않습니다.", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     public void processIntent(Intent intent){
@@ -264,7 +288,8 @@ public class CategoryMemoActivity extends AppCompatActivity {
                 NfcAdapter.EXTRA_NDEF_MESSAGES);
         NdefMessage msg = (NdefMessage) rawMsgs[0];
         // record 0 은 MIME type을 포함하고, 만약 주석 처리를 제거하고 AAR을 설정했으면 record 1 은 AAR 이다.
-        category_id = Integer.valueOf(new String(msg.getRecords()[0].getPayload()));
+        Category ct =  db.getCategoryByName(new String(msg.getRecords()[0].getPayload()));
+        category_id = (ct.getId() > 0 ? ct.getId() : 0);
     }
 
     @Override

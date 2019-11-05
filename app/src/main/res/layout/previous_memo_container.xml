@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- height가 60이면 화면의 85퍼, 270이면 55퍼 정도 -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id = "@+id/previous_memo_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_behavior="com.project.memowithnfc.LockableBottomSheetBehavior"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="100dp">
+
+    <TextView
+        android:id="@+id/previous_memo_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="  지나간 메모"
+        android:gravity="center_vertical"
+        android:background="@drawable/rounded_top"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_previous_memo"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:overScrollMode="never"
+        android:background="@drawable/side_boundary"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="vertical">
+    </LinearLayout>
+</LinearLayout>

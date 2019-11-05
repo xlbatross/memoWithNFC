@@ -2,10 +2,12 @@ package com.project.memowithnfc;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +18,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -108,14 +112,13 @@ public class WriteMemoActivity extends AppCompatActivity {
         ToggleButton alarm = findViewById(R.id.alarm_setting);
 
         if(alarm.isChecked())
-            memo.setAlarmSetting(111);
+            memo.setAlarmSetting(1);
         else
             memo.setAlarmSetting(0);
 
         Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0,0);
 
-        long k = 0; // 푸시 알람용
         if(memo.getCategory_id() == 0)
             toast.setText("카테고리가 선택되지 않았습니다.");
         else if(memo.getDate() == null)
@@ -126,11 +129,9 @@ public class WriteMemoActivity extends AppCompatActivity {
             toast.setText("메모가 작성되지 않았습니다.");
         else if(memo.getContent().indexOf(" ") == 0 || memo.getContent().indexOf("\n") == 0)
             toast.setText("공백문자나 개행이 먼저 올 수 없습니다.");
-        else if((k = db.insertMemo(memo)) > 0) {
+        else if(db.insertMemo(memo) > 0) {
+            setAlarm(memo.getAlarmSetting());
             toast.setText("메모 작성 완료!");
-
-            if(memo.getAlarmSetting()>0)
-                initAlarmManager();
 
             finish();
         }
@@ -142,39 +143,29 @@ public class WriteMemoActivity extends AppCompatActivity {
 
     ////////////////////////////////////////////// hasukjun
 
-    // 메모를 처음 등록할떄 알고리즘
-    //
-    private void initAlarmManager(){
+    private void setAlarm(int isAlarm){
         // 메모 전체화면 열어주기 뷰홀더를 이용하여 메모 아이디를 넘기고 있음
         // 메모 아이디만 넘겨주면 전체화면을 열수 있다.
         // 메모 아이디를 리시버에 넘겨준다.
         // 페딩 인텐트에 메모 아이드를 보내 줄 수 있도록한다.
         // 현재 여기서 클릭될 메모 아이디를 받아올수 있는가
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.app_name);
-            String description = getString(R.string.app_name);
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("test3", name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = (NotificationManager) this
-                    .getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(channel);
-        }
-
         Intent intent = new Intent(this, MyBroadcastReceiver.class);//  인텐트가 어디로 갈지 적어줘야 한다.
-
-        // 인텐트로 전달할 값
-        intent.putExtra("memo_id", memo.getId());
         intent.putExtra("category_name", memo.getCategory_name());
         intent.putExtra("content", memo.getContent());
 
         PendingIntent m_pendingIntent = PendingIntent.getBroadcast(this, memo.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         // define context and intent for receiver broadcast  나중에 알람을 찾기 위해 메모 아이디로 알람을 서비스에 등록한다.
 
-        // set alarm manager
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);// get alarm service
-        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), m_pendingIntent); // set alarm
+
+        switch(isAlarm) {
+            case 1 : {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), m_pendingIntent); // set alarm
+            } break;
+            case 0 : {
+                alarmManager.cancel(m_pendingIntent); // delete alarm
+            } break;
+        }
     }
 
     ////////////////////////////////////////////// hasukjun

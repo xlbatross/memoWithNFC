@@ -1,9 +1,13 @@
 package com.project.memowithnfc;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
+import android.os.Build;
 import android.os.Parcelable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         create_data();
+        init_channel();
         init_toolbar();
         init_category();
         init_menu();
@@ -74,6 +79,19 @@ public class MainActivity extends AppCompatActivity {
         db.insertMemo(memo7);
         db.insertMemo(memo8);
         db.insertMemo(memo9);
+    }
+
+    public void init_channel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.app_name);
+            String description = getString(R.string.app_name);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("test", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = (NotificationManager) this
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     public void init_toolbar() {

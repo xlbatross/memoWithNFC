@@ -1,7 +1,9 @@
 package com.project.memowithnfc;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -50,6 +52,7 @@ public class WholeMemoActivity extends AppCompatActivity {
     private TextView time;
     private ToggleButton alarmSetting;
     private EditText content;
+    private Calendar cal = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +84,7 @@ public class WholeMemoActivity extends AppCompatActivity {
         category_select.setText(ex_memo.getCategory_name());
         date.setText(ex_memo.getDate());
         time.setText(ex_memo.getTime());
-        alarmSetting.setChecked(ex_memo.getAlarmSetting() == 111);
+        alarmSetting.setChecked(ex_memo.getAlarmSetting() == 1);
         content.setText(ex_memo.getContent());
 
         ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.whole_memo_container);
@@ -140,40 +143,62 @@ public class WholeMemoActivity extends AppCompatActivity {
                 return true;
             }
             case R.id.memo_add: {
-                if(alarmSetting.isChecked())
-                    new_memo.setAlarmSetting(111);
-                else
-                    new_memo.setAlarmSetting(0);
-
-                if(new_memo.getAlarmSetting() != ex_memo.getAlarmSetting())
-                    change = true;
-
-                Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0,0);
-                if(change) {
-                    if(new_memo.getContent() == null)
-                        toast.setText("메모 내용이 없습니다.");
-                    else if(new_memo.getContent().indexOf(" ") == 0 || new_memo.getContent().indexOf("\n") == 0)
-                        toast.setText("메모 내용 수정 시 공백문자나 개행이 먼저 올 수 없습니다.");
-                    else if(db.updateMemo(new_memo) > 0) {
-                        toast.setText("메모 수정 완료!");
-
-                        Intent intent = new Intent();
-                        intent.putExtra("change_db", 1);
-
-                        finish();
-                    }
-                    else
-                        toast.setText("메모 수정에 실패했습니다. 다시 시도해주세요.");
-                }
-                else
-                    toast.setText("메모가 변경되지 않았습니다.");
-                toast.show();
+                rewrite_memo();
                 return true;
             }
             default: {
                 return super.onOptionsItemSelected(item);
             }
+        }
+    }
+
+    public void rewrite_memo() {
+        if(alarmSetting.isChecked())
+            new_memo.setAlarmSetting(1);
+        else
+            new_memo.setAlarmSetting(0);
+
+        if(new_memo.getAlarmSetting() != ex_memo.getAlarmSetting())
+            change = true;
+
+        Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0,0);
+        if(change) {
+            if(new_memo.getContent() == null)
+                toast.setText("메모 내용이 없습니다.");
+            else if(new_memo.getContent().indexOf(" ") == 0 || new_memo.getContent().indexOf("\n") == 0)
+                toast.setText("메모 내용 수정 시 공백문자나 개행이 먼저 올 수 없습니다.");
+            else if(db.updateMemo(new_memo) > 0) {
+                toast.setText("메모 수정 완료!");
+                setAlarm(db.getMemo(new_memo.getId()).getAlarmSetting());
+                finish();
+            }
+            else
+                toast.setText("메모 수정에 실패했습니다. 다시 시도해주세요.");
+        }
+        else
+            toast.setText("메모가 변경되지 않았습니다.");
+        toast.show();
+    }
+
+    private void setAlarm(int isAlarm){
+        Memo memo = db.getMemo(new_memo.getId());
+        Intent intent = new Intent(this, MyBroadcastReceiver.class);//  인텐트가 어디로 갈지 적어줘야 한다.
+        intent.putExtra("category_name", memo.getCategory_name());
+        intent.putExtra("content", memo.getContent());
+
+        PendingIntent m_pendingIntent = PendingIntent.getBroadcast(this, new_memo.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // define context and intent for receiver broadcast  나중에 알람을 찾기 위해 메모 아이디로 알람을 서비스에 등록한다.
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);// get alarm service
+
+        switch(isAlarm) {
+            case 1 :
+                alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), m_pendingIntent); // set alarm
+                break;
+            case 0 :
+                alarmManager.cancel(m_pendingIntent); // delete alarm
+            break;
         }
     }
 
@@ -222,6 +247,9 @@ public class WholeMemoActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH, monthOfYear);
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 String monthofyears = (monthOfYear + 1 >= 10 ? String.valueOf(monthOfYear + 1) : "0" + String.valueOf(monthOfYear + 1));
                 String dayofmonths = (dayOfMonth >= 10 ? String.valueOf(dayOfMonth) : "0" + String.valueOf(dayOfMonth));
                 date.setText(String.valueOf(year) + "-" + monthofyears + "-" + dayofmonths);
@@ -242,6 +270,9 @@ public class WholeMemoActivity extends AppCompatActivity {
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                cal.set(Calendar.MINUTE, minute);
+                cal.set(Calendar.SECOND, 0);
                 String hourofdays = (hourOfDay >= 10 ? String.valueOf(hourOfDay) : "0" + String.valueOf(hourOfDay));
                 String minutes = (minute >= 10 ? String.valueOf(minute) : "0" + String.valueOf(minute));
                 time.setText(hourofdays + ":" + minutes);

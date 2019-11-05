@@ -8,8 +8,10 @@ import android.graphics.Typeface;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -198,43 +200,30 @@ public class CategoryMemoActivity extends AppCompatActivity {
 
     public void init_previous_memo_button() {
         TextView previous_text = (TextView) findViewById(R.id.previous_memo_button);
-        ConstraintLayout category_memo = (ConstraintLayout) findViewById(R.id.category_memo_container);
-        ConstraintLayout previous = (ConstraintLayout) findViewById(R.id.previous_memo_container);
-        ConstraintSet wide = new ConstraintSet();
-        ConstraintSet reset = new ConstraintSet();
-        wide.clone(category_memo);
-        reset.clone(category_memo);
+        LinearLayout bottom_sheet = (LinearLayout) findViewById(R.id.previous_memo_container);
+        BottomSheetBehavior<LinearLayout> behavior = BottomSheetBehavior.from(bottom_sheet);
+
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            }
+        });
 
         previous_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                float density = v.getContext().getResources().getDisplayMetrics().density;
-                if(previous.getHeight() == Math.ceil(60 * density)) {
-                    wide.constrainHeight(R.id.previous_memo_container, (int)(270 * density));
-                    wide.applyTo(category_memo);
-                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_wide_height);
-                    previous.startAnimation(animation);
+                if(behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
-                else {
-                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_reset_height);
-                    previous.startAnimation(animation);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            reset.applyTo(category_memo);
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
-                    });
-                }
+                else if(behavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
     }
@@ -271,6 +260,7 @@ public class CategoryMemoActivity extends AppCompatActivity {
             nRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getNextMemosByCategory(category_id)));
             pRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getPreviousMemosByCategory(category_id)));
         }
+
         else {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent

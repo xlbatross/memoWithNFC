@@ -1,62 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/category_memo_container"
     tools:context=".CategoryMemoActivity">
 
-    <include
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/toolbar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/recycler_view_next_memo"
-        />
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_next_memo"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:overScrollMode="never"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintBottom_toTopOf="@+id/previous_memo_container"
-        tools:layout_editor_absoluteX="0dp" >
-    </android.support.v7.widget.RecyclerView>
+        <include layout="@layout/toolbar" />
 
-    <!-- height가 60이면 화면의 85퍼, 270이면 55퍼 정도 -->
-    <android.support.constraint.ConstraintLayout
-        android:id = "@+id/previous_memo_container"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:layout_constraintTop_toBottomOf="@id/recycler_view_next_memo"
-        app:layout_constraintBottom_toTopOf="@id/menu_container">
+    </android.support.design.widget.AppBarLayout>
 
-        <TextView
-            android:id="@+id/previous_memo_button"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="지나간 메모"
-            android:gravity="center_vertical"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/recycler_view_previous_memo" />
+    <include layout="@layout/content_category_memo"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_previous_memo"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@+id/previous_memo_button"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-    </android.support.constraint.ConstraintLayout>
+    <include layout="@layout/previous_memo_container"/>
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/menu_container"
-        app:layout_constraintTop_toBottomOf="@id/previous_memo_container"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+    <include layout="@layout/menu_container" />
 
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -20,7 +20,6 @@ public class MemoViewHolder extends RecyclerView.ViewHolder {
 
     public MemoViewHolder(View view) {
         super(view);
-        this.mView = view;
         this.cl = (ConstraintLayout) view.findViewById(R.id.Memo_container);
         this.content = (TextView) view.findViewById(R.id.Memo_content);
         this.time = (TextView) view.findViewById(R.id.Memo_time);
@@ -28,13 +27,12 @@ public class MemoViewHolder extends RecyclerView.ViewHolder {
         this.category = (TextView) view.findViewById(R.id.Memo_category);
         this.mid = (TextView) view.findViewById(R.id.Memo_id);
 
-        this.mView.setOnLongClickListener(new View.OnLongClickListener() {
+        this.cl.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 Intent intent = new Intent(view.getContext(), WholeMemoActivity.class);
                 intent.putExtra("memo_id", Integer.valueOf(mid.getText().toString()));
                 view.getContext().startActivity(intent);
-                return false;
             }
         });
     }

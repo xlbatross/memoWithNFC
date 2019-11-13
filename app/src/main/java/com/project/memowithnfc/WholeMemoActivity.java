@@ -28,6 +28,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -82,8 +83,11 @@ public class WholeMemoActivity extends AppCompatActivity {
         content = (EditText) findViewById(R.id.content_in_whole_memo);
 
         category_select.setText(ex_memo.getCategory_name());
+        category_select.setTextColor(Color.BLACK);
         date.setText(ex_memo.getDate());
+        date.setTextColor(Color.BLACK);
         time.setText(ex_memo.getTime());
+        time.setTextColor(Color.BLACK);
         alarmSetting.setChecked(ex_memo.getAlarmSetting() == 1);
         content.setText(ex_memo.getContent());
 
@@ -311,7 +315,7 @@ public class WholeMemoActivity extends AppCompatActivity {
     }
 
     public void init_delete() {
-        Button delete = (Button) findViewById(R.id.delete_memo);
+        ImageButton delete = (ImageButton) findViewById(R.id.delete_memo);
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override

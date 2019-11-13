@@ -42,11 +42,13 @@
         app:layout_constraintTop_toBottomOf="@id/memo_attribute"
         app:layout_constraintVertical_bias="1.0" />
 
-    <Button
+    <ImageButton
         android:id="@+id/delete_memo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         android:text="delete"
+        app:srcCompat="@drawable/ic_delete_24px"
         app:layout_constraintTop_toBottomOf="@id/content_in_whole_memo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

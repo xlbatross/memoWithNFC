@@ -16,14 +16,17 @@
         android:id="@+id/previous_memo_button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="  지나간 메모"
+        android:text="   지나간 메모"
+        android:fontFamily="@font/scdream3"
+        android:textStyle="bold"
+        android:textSize="18sp"
         android:gravity="center_vertical"
         android:background="@drawable/rounded_top"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_previous_memo"
         android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_height="240dp"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
         android:overScrollMode="never"

@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
     public void create_data() {
         db = new DBHelper(getApplicationContext());
 
-        Category cg = new Category("문앞");
-        Category cg2 = new Category("문뒤");
+        Category cg = new Category("할일");
+        Category cg2 = new Category("카테고리");
         Category cg3 = new Category("테스트");
         db.insertCategory(cg);
         db.insertCategory(cg2);
@@ -61,24 +62,21 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Category> cLIst = db.getAllCategories();
 
-        Memo memo = new Memo("2019-10-10", "14:45", "너나 그리고 우리의 할일은? 공부하는 것인가? 그래야 하는 것인가?이", 111, cLIst.get(0).getId());
-        Memo memo2 = new Memo("2019-10-12", "13:00", "우리의 할일은?이", 111, cLIst.get(0).getId());
-        Memo memo3 = new Memo("2019-10-12", "14:00", "쌈이 밥사기이", 111, cLIst.get(0).getId());
-        Memo memo4 = new Memo("2019-10-14", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
-        Memo memo5 = new Memo("2019-10-15", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
-        Memo memo6 = new Memo("2019-10-16", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
-        Memo memo7 = new Memo("2019-10-17", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
-        Memo memo8 = new Memo("2019-10-18", "14:00", "일단 테스트이", 111, cLIst.get(1).getId());
-        Memo memo9 = new Memo("2019-10-19", "14:00", "일단 테스트이", 111, cLIst.get(2).getId());
-        db.insertMemo(memo);
-        db.insertMemo(memo2);
-        db.insertMemo(memo3);
-        db.insertMemo(memo4);
-        db.insertMemo(memo5);
-        db.insertMemo(memo6);
-        db.insertMemo(memo7);
-        db.insertMemo(memo8);
-        db.insertMemo(memo9);
+        db.insertMemo(new Memo("2019-11-14", "14:00", "나의 할일은? 공부하는 것인가? 그래야 하는 것인가?", 1, cLIst.get(0).getId()));
+        db.insertMemo(new Memo("2019-11-14", "14:00", "너의 할일은?", 1, cLIst.get(0).getId()));
+        db.insertMemo(new Memo("2019-11-14", "15:12", "우리의 할일은?", 1, cLIst.get(0).getId()));
+        db.insertMemo(new Memo("2019-10-14", "14:00", "테스트 데이터", 1, cLIst.get(1).getId()));
+        db.insertMemo(new Memo("2019-10-15", "14:00", "테스트 데이터", 1, cLIst.get(1).getId()));
+        db.insertMemo(new Memo("2019-10-16", "14:00", "테스트 데이터", 1, cLIst.get(1).getId()));
+        db.insertMemo(new Memo("2019-10-17", "14:00", "테스트 데이터", 1, cLIst.get(1).getId()));
+        db.insertMemo(new Memo("2019-10-18", "14:00", "테스트 데이터", 1, cLIst.get(1).getId()));
+        db.insertMemo(new Memo("2019-11-14", "14:00", "테스트 데이터", 1, cLIst.get(2).getId()));
+        db.insertMemo(new Memo("2019-11-15", "14:00", "테스트 데이터", 1, cLIst.get(2).getId()));
+        db.insertMemo(new Memo("2019-11-16", "14:00", "테스트 데이터", 1, cLIst.get(2).getId()));
+        db.insertMemo(new Memo("2019-11-17", "14:00", "테스트 데이터", 1, cLIst.get(2).getId()));
+        db.insertMemo(new Memo("2019-11-18", "14:00", "테스트 데이터", 1, cLIst.get(2).getId()));
+        db.insertMemo(new Memo("2019-11-19", "14:00", "테스트 데이터", 1, cLIst.get(2).getId()));
+        db.insertMemo(new Memo("2019-10-19", "14:00", "테스트 데이터", 1, cLIst.get(2).getId()));
     }
 
     public void init_channel() {
@@ -142,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void init_menu() {
-        Button add_memo = (Button) findViewById(R.id.add_memo);
+        LinearLayout add_memo = (LinearLayout) findViewById(R.id.add_memo);
         add_memo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button regist_nfc = (Button) findViewById(R.id.register_nfc);
+        LinearLayout regist_nfc = (LinearLayout) findViewById(R.id.register_nfc);
         regist_nfc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

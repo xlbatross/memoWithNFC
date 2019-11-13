@@ -206,9 +206,7 @@ public class CategoryMemoActivity extends AppCompatActivity {
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
 
-                }
             }
 
             @Override
@@ -229,16 +227,17 @@ public class CategoryMemoActivity extends AppCompatActivity {
     }
 
     public void init_menu() {
-        Button add_memo = (Button) findViewById(R.id.add_memo);
+        LinearLayout add_memo = (LinearLayout) findViewById(R.id.add_memo);
         add_memo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), WriteMemoActivity.class);
+                intent.putExtra("category_name", title.getText());
                 startActivity(intent);//액티비티 띄우기
             }
         });
 
-        Button regist_nfc = (Button) findViewById(R.id.register_nfc);
+        LinearLayout regist_nfc = (LinearLayout) findViewById(R.id.register_nfc);
         regist_nfc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -260,7 +259,6 @@ public class CategoryMemoActivity extends AppCompatActivity {
             nRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getNextMemosByCategory(category_id)));
             pRecyclerView.setAdapter(new CategoryMemoAdapter(this, db.getPreviousMemosByCategory(category_id)));
         }
-
         else {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent

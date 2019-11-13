@@ -173,6 +173,15 @@ public class WriteMemoActivity extends AppCompatActivity {
     public void init_category_select() {
         category_select = (TextView) findViewById(R.id.category_selector);
 
+        String category_name = getIntent().getStringExtra("category_name");
+        if(category_name != null) {
+            Category result = db.getCategoryByName(category_name);
+            category_select.setText(result.getName());
+            category_select.setTextColor(Color.BLACK);
+            memo.setCategory_name(result.getName());
+            memo.setCategory_id(result.getId());
+        }
+
         category_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

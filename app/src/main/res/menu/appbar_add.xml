@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/memo_add"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_add_24px"
         android:title="add"
         app:showAsAction="always"/>
 </menu>

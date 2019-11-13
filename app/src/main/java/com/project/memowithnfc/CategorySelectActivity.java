@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.project.memowithnfc.categoryselectListView.CategorySelectAdapter;
@@ -59,7 +60,7 @@ public class CategorySelectActivity extends AppCompatActivity {
 
     public void init_add_category() {
         EditText new_category = (EditText) findViewById(R.id.add_category_name);
-        Button add = (Button) findViewById(R.id.add_category_button);
+        ImageButton add = (ImageButton) findViewById(R.id.add_category_button);
 
         new_category.addTextChangedListener(new TextWatcher() {
             @Override

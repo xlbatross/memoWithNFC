@@ -51,11 +51,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/add_category_button"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/add_category_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:text="plus"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_add_24px"
         app:layout_constraintTop_toBottomOf="@id/category_list"
         app:layout_constraintBottom_toTopOf="@id/checkBar"
         app:layout_constraintStart_toEndOf="@id/add_category_name"

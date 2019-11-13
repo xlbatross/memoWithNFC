@@ -3,27 +3,53 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id = "@+id/menu_container"
+    android:background="@drawable/gradient"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_gravity="bottom">
 
-    <Button
+    <LinearLayout
         android:id="@+id/register_nfc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="nfc 등록"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:background="@drawable/rounded_left"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/add_memo"/>
+        app:layout_constraintEnd_toStartOf="@id/add_memo">
 
-    <Button
+        <ImageView
+            android:id="@+id/register_nfc_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            app:srcCompat="@drawable/ic_nfc_24px" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/add_memo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="메모 추가"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_right"
+        android:clickable="true"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/register_nfc"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintStart_toEndOf="@+id/register_nfc"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/ic_post_add_24px" />
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

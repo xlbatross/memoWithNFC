@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/borderline_black"
                 android:fontFamily="@font/scdream3"
-                android:hint="터치하면 카테고리 선택창이 뜹니다"
+                android:hint="터치시 카테고리 선택창"
                 android:padding="5dp"
                 android:textSize="15sp"
                 android:textStyle="bold"
